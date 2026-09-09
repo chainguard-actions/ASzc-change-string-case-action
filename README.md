@@ -1,14 +1,56 @@
-# ASzc/change-string-case-action
+# Change String Case GitHub Action
 
-Make a string lowercase, uppercase, or capitalized
+This action accepts any string, and outputs three different versions of that string:
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/ASzc/change-string-case-action](https://github.com/ASzc/change-string-case-action).
+- lowercase (`XyZzY` -> `xyzzy`)
+- uppercase (`XyZzY` -> `XYZZY`)
+- capitalized (`Xyzzy` -> `Xyzzy`)
 
-## Versions
+You can access the outputted strings through the job outputs context. See docs [here](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjobs_idoutputs), or the Example Usage section below.
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v6 | [`v6`](https://github.com/chainguard-actions/ASzc-change-string-case-action/tree/v6) | [`d0603cd`](https://github.com/ASzc/change-string-case-action/commit/d0603cd0a7dd490be678164909f65c7737470a7f) |
+## Inputs
+
+### `string`
+
+**Required** The string you want manipulated
+
+## Outputs
+
+### `lowercase`
+
+`inputStr.toLowerCase()`
+
+Example: `XyZzY` -> `xyzzy`
+
+### `uppercase`
+
+`inputStr.toUpperCase()`
+
+Example: `XyZzY` -> `XYZZY`
+
+### `capitalized`
+
+`inputStr.charAt(0).toUpperCase() + inputStr.slice(1).toLowerCase()`
+
+Example: `XyZzY` -> `Xyzzy`
+
+## Example Usage
+
+```yaml
+name: SomeWorkflow
+on: [push]
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - id: string
+        uses: ASzc/change-string-case-action@v7
+        with:
+          string: XyZzY
+      - id: step2
+        run: echo ${{ steps.string.outputs.lowercase }}
+```
 
 ## Privacy
 

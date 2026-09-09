@@ -1,0 +1,42 @@
+name: Test all outputs together
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          string: "mIxEd CaSe StRiNg"
+      - name: Assert lowercase output
+        env:
+          ACTUAL: ${{ steps.action.outputs.lowercase }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "mixed case string" ]; then
+            echo "FAIL: expected 'mixed case string', got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"
+      - name: Assert uppercase output
+        env:
+          ACTUAL: ${{ steps.action.outputs.uppercase }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "MIXED CASE STRING" ]; then
+            echo "FAIL: expected 'MIXED CASE STRING', got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"
+      - name: Assert capitalized output
+        env:
+          ACTUAL: ${{ steps.action.outputs.capitalized }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "Mixed case string" ]; then
+            echo "FAIL: expected 'Mixed case string', got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"

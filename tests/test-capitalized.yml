@@ -1,0 +1,22 @@
+name: Test capitalized output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          string: "hELLO wORLD"
+      - name: Assert capitalized output
+        env:
+          ACTUAL: ${{ steps.action.outputs.capitalized }}
+        run: |
+          echo "actual: $ACTUAL"
+          if [ "$ACTUAL" != "Hello world" ]; then
+            echo "FAIL: expected 'Hello world', got '$ACTUAL'"
+            exit 1
+          fi
+          echo "PASS"
